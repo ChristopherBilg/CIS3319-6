@@ -1,0 +1,24 @@
+{
+  "name": "cis3319-6",
+  "version": "1.0.0",
+  "description": "CIS 3319 - Wireless Security - Lab 6",
+  "main": "src/index.js",
+  "private": true,
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ChristopherBilg/CIS3319-6.git"
+  },
+  "author": "Christopher Bilger",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ChristopherBilg/CIS3319-6/issues"
+  },
+  "homepage": "https://github.com/ChristopherBilg/CIS3319-6#readme",
+  "dependencies": {
+    "readline-sync": "^1.4.10"
+  }
+}
