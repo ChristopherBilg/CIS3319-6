@@ -6,7 +6,10 @@
   "private": true,
   "scripts": {
     "start": "node src/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "eslint src/",
+    "client": "node src/client.js",
+    "server": "node src/server.js",
+    "cert_auth": "node src/cert_auth.js"
   },
   "repository": {
     "type": "git",
@@ -19,6 +22,11 @@
   },
   "homepage": "https://github.com/ChristopherBilg/CIS3319-6#readme",
   "dependencies": {
+    "node-rsa": "^1.0.8",
     "readline-sync": "^1.4.10"
+  },
+  "devDependencies": {
+    "eslint": "^6.8.0",
+    "eslint-config-google": "^0.14.0"
   }
 }
