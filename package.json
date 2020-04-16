@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/ChristopherBilg/CIS3319-6#readme",
   "dependencies": {
+    "cryptr": "^6.0.2",
     "node-rsa": "^1.0.8",
     "readline-sync": "^1.4.10"
   },
