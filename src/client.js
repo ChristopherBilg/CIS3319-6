@@ -20,12 +20,12 @@ const kSess = require('../key/kSess.json').key;
 const Cryptr = require('cryptr');
 const cryptr = new Cryptr(kSess);
 
-const encrypt = (text) => {
-  return cryptr.encrypt(text);
+const encrypt = (text, key) => {
+  return new Cryptr(key).encrypt(text);
 };
 
-const decrypt = (text) => {
-  return cryptr.decrypt(text);
+const decrypt = (text, key) => {
+  return new Cryptr(key).decrypt(text);
 };
 
 const getSessionKeyFromServerS1 = new Promise((resolve, reject) => {
@@ -105,12 +105,12 @@ const getApplicationDataFromServerS = new Promise((resolve, reject) => {
       req: req,
       TS7: new Date().getTime(),
     };
-    socket.write(encrypt(JSON.stringify(message)));
+    socket.write(encrypt(JSON.stringify(message), kSess));
   });
 
   socket.on('data', (data) => {
     console.log(`Client received data: ${data}`);
-    data = decrypt(data);
+    data = decrypt(data, kSess);
     console.log(`Client received data: ${data}`);
 
     data = JSON.parse(data);

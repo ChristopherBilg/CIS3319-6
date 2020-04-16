@@ -17,14 +17,13 @@ const certAuthPort = 5002;
 const tempDESKey1 = require('../key/tempDESKey1.json').key;
 const kSess = require('../key/kSess.json').key;
 const Cryptr = require('cryptr');
-const cryptr = new Cryptr(kSess);
 
-const encrypt = (text) => {
-  return cryptr.encrypt(text);
+const encrypt = (text, key) => {
+  return new Cryptr(key).encrypt(text);
 };
 
-const decrypt = (text) => {
-  return cryptr.decrypt(text);
+const decrypt = (text, key) => {
+  return new Cryptr(key).decrypt(text);
 };
 
 const getApplicationServerRegistration = new Promise((resolve, reject) => {
@@ -143,7 +142,7 @@ const handleApplicationData = new Promise((resolve, reject) => {
 
     socket.on('data', (data) => {
       console.log(`${remoteAddress} sent the message: ${data}`);
-      data = decrypt(data);
+      data = decrypt(data, kSess);
       console.log(`${remoteAddress} sent the message: ${data}`);
 
       data = JSON.parse(data);
@@ -153,7 +152,7 @@ const handleApplicationData = new Promise((resolve, reject) => {
         TS8: new Date().getTime(),
         exit: true,
       };
-      socket.write(encrypt(JSON.stringify(message)));
+      socket.write(encrypt(JSON.stringify(message), kSess));
     });
 
     socket.on('close', () => {
