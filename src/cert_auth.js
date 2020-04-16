@@ -15,6 +15,15 @@ const clientPort = 5000;
 const serverPort = 5001;
 const certAuthPort = 5002;
 const tempDESKey1 = require('../key/tempDESKey1.json').key;
+const Cryptr = require('cryptr');
+
+const encrypt = (text, key) => {
+  return new Cryptr(key).encrypt(text);
+};
+
+const decrypt = (text, key) => {
+  return new Cryptr(key).decrypt(text);
+};
 
 console.log('Waiting for the server to connect and request a application server registration.');
 const server = net.createServer((socket) => {
@@ -22,6 +31,8 @@ const server = net.createServer((socket) => {
   console.log(`Server connected: ${remoteAddress}`);
 
   socket.on('data', (data) => {
+    console.log(`${remoteAddress} sent the message: ${data}`);
+    data = decrypt(data, tempDESKey1);
     console.log(`${remoteAddress} sent the message: ${data}`);
 
     data = JSON.parse(data);
@@ -40,7 +51,7 @@ const server = net.createServer((socket) => {
       TS2: new Date().getTime(),
       exit: true,
     };
-    socket.write(JSON.stringify(message));
+    socket.write(encrypt(JSON.stringify(message), tempDESKey1));
   });
 
   socket.on('close', () => {

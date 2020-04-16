@@ -18,7 +18,6 @@ const tempDESKey1 = require('../key/tempDESKey1.json').key;
 const tempDESKey2 = require('../key/tempDESKey2.json').key;
 const kSess = require('../key/kSess.json').key;
 const Cryptr = require('cryptr');
-const cryptr = new Cryptr(kSess);
 
 const encrypt = (text, key) => {
   return new Cryptr(key).encrypt(text);
@@ -73,11 +72,14 @@ const getSessionKeyFromServerS2 = new Promise((resolve, reject) => {
       portC: clientPort,
       TS5: new Date().getTime(),
     };
-    socket.write(JSON.stringify(message));
+    socket.write(encrypt(JSON.stringify(message), tempDESKey2));
   });
 
   socket.on('data', (data) => {
     console.log(`Client received data: ${data}`);
+    data = decrypt(data, tempDESKey2);
+    console.log(`Client received data: ${data}`);
+
     data = JSON.parse(data);
     if (data.exit === true) {
       socket.destroy();

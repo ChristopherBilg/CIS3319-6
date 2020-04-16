@@ -15,6 +15,7 @@ const clientPort = 5000;
 const serverPort = 5001;
 const certAuthPort = 5002;
 const tempDESKey1 = require('../key/tempDESKey1.json').key;
+const tempDESKey2 = require('../key/tempDESKey2.json').key;
 const kSess = require('../key/kSess.json').key;
 const Cryptr = require('cryptr');
 
@@ -38,11 +39,14 @@ const getApplicationServerRegistration = new Promise((resolve, reject) => {
       TS1: new Date().getTime(),
       exit: true,
     };
-    socket.write(JSON.stringify(message));
+    socket.write(encrypt(JSON.stringify(message), tempDESKey1));
   });
 
   socket.on('data', (data) => {
     console.log(`Server received data: ${data}`);
+    data = decrypt(data, tempDESKey1);
+    console.log(`Server received data: ${data}`);
+
     data = JSON.parse(data);
     if (data.exit === true) {
       socket.destroy();
@@ -107,6 +111,8 @@ const handleSessionKey2 = new Promise((resolve, reject) => {
 
     socket.on('data', (data) => {
       console.log(`${remoteAddress} sent the message: ${data}`);
+      data = decrypt(data, tempDESKey2);
+      console.log(`${remoteAddress} sent the message: ${data}`);
 
       data = JSON.parse(data);
 
@@ -117,7 +123,7 @@ const handleSessionKey2 = new Promise((resolve, reject) => {
         TS6: new Date().getTime(),
         exit: true,
       };
-      socket.write(JSON.stringify(message));
+      socket.write(encrypt(JSON.stringify(message), tempDESKey2));
     });
 
     socket.on('close', () => {
